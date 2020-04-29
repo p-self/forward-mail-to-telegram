@@ -12,10 +12,17 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
     bot.sendMessage(chatId, resp);
 });
 
-// bot.on('message', (msg) => {
-//     const chatId = msg.chat.id;
-//     bot.sendMessage(chatId, 'Received your message');
-// });
+global.blockMail = {};
+
+bot.on('message', (msg) => {
+    let checkFrom = /^FROM:\s*(.*)\n/.exec(msg.reply_to_message.text);
+    if(checkFrom){
+        global.blockMail[checkFrom[1].trim()] = true;
+    }
+    console.log(global.blockMail)
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, 'Received your message');
+});
 module.exports = {
     sendMessage(message){
         bot.sendMessage(process.argv[3], message);

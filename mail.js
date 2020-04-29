@@ -28,6 +28,9 @@ mailin.on('startMessage', function (connection) {
 
 /* Event emitted after a message was received and parsed. */
 mailin.on('message', function (connection, data, content) {
+    if( global.blockMail[data.headers.from.trim()]){
+        return;
+    }
     require("./bot").sendMessage(`
 FROM: ${data.headers.from}
 TO: ${data.headers.to}
